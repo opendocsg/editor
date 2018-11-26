@@ -1,0 +1,32 @@
+<head>
+	<meta charset="utf-8"/>
+	<link href="https://fonts.googleapis.com/css?family=Fira+Sans:400,600" rel="stylesheet" type="text/css">
+	<link href="https://fonts.googleapis.com/css?family=Noto+Serif:400,700" rel="stylesheet" type="text/css">
+	<link href="https://fonts.googleapis.com/css?family=Noto+Sans:400,700" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="https://docs.opendoc.sg/assets/styles/normalize.css">
+	<link rel="stylesheet" href="https://docs.opendoc.sg/assets/styles/main.css">
+	<link rel="stylesheet" href="./css/editormd.css" />
+</head>
+
+<body>
+	<input type="file" id="docupload" name="docupload" style="display:none" onchange="myBundle.detectUpload()" accept=".doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,.md">
+	<div id="editormd">
+		<textarea id="markdown" style="display:none;">**Upload your Word/ Markdown document and start editing!**</textarea>
+	</div>
+	<script src="jquery-3.3.1.min.js"></script>
+	<script src="editormd.js"></script>
+	<script src="languages/en.js"></script>
+	<script type="text/javascript">
+		$(function() {
+			var editor = editormd("editormd", {
+				path : "./lib/" // Autoload modules mode, codemirror, marked... dependents libs path
+			});
+		});
+	</script>
+	<script>
+      function jsFunc(arg1, arg2) {
+        if (arg1 && arg2) document.body.innerHTML = "achoo";
+      }
+    </script>
+	<script src="bundle.js"></script>	
+</body>
