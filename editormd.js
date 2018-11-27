@@ -1131,57 +1131,6 @@
         },
         
         /**
-         * 显示关于Editor.md
-         * Display about Editor.md dialog
-         * 
-         * @returns {editormd}  返回editormd的实例对象
-         */
-        
-        showInfoDialog : function() {
-
-            $("html,body").css("overflow-x", "hidden");
-            
-            var _this       = this;
-			var editor      = this.editor;
-            var settings    = this.settings;         
-			var infoDialog  = this.infoDialog = editor.children("." + this.classPrefix + "dialog-info");
-            
-            if (infoDialog.length < 1)
-            {
-                this.createInfoDialog();
-            }
-            
-            this.lockScreen(true);
-            
-            this.mask.css({
-						opacity         : settings.dialogMaskOpacity,
-						backgroundColor : settings.dialogMaskBgColor
-					}).show();
-
-			infoDialog.css("z-index", editormd.dialogZindex).show();
-
-			this.infoDialogPosition();
-
-            return this;
-        },
-        
-        /**
-         * 隐藏关于Editor.md
-         * Hide about Editor.md dialog
-         * 
-         * @returns {editormd}  返回editormd的实例对象
-         */
-        
-        hideInfoDialog : function() {            
-            $("html,body").css("overflow-x", "");
-            this.infoDialog.hide();
-            this.mask.hide();
-            this.lockScreen(false);
-
-            return this;
-        },
-        
-        /**
          * 锁屏
          * lock screen
          * 
@@ -3339,7 +3288,7 @@
             atLink               : true,    // for @link
             emailLink            : true,    // for mail address auto link
             tex                  : false,
-            taskList             : false,   // Github Flavored Markdown task lists
+            taskList             : true,   // Github Flavored Markdown task lists
             emoji                : false,
             flowChart            : false,
             sequenceDiagram      : false,

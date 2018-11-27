@@ -38,7 +38,7 @@ var detectUpload = function(){
 									filter: 'img',
 									replacement: function (content) {
 										count += 1;
-										return '![Alternative Text](images/'+count+'.png)';
+										return '![~~*Alternative Text*~~](images/'+count+'.png)';
 									}
 								})
 								var markdown = turndownService.turndown(html);
