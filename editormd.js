@@ -9,7 +9,7 @@
  * {@link       https://github.com/pandao/editor.md}
  * @updateTime  2015-06-09
  */
-
+ 
 ;(function(factory) {
     "use strict";
     
@@ -2683,18 +2683,17 @@
 		"file-export" : function() {
 			var output = this.editor.children("textarea")[0].innerText;
 			var filename = "markdown.md";
-			
-			var element = document.createElement('a');
-			element.setAttribute('href', 'data:markdown/markdown;charset=utf-8,' + encodeURIComponent(output));
-			element.setAttribute('download', filename);
-
-			element.style.display = 'none';
-			document.body.appendChild(element);
-
-			element.click();
-
-			document.body.removeChild(element);
-			//var f = new File([output], "markdown.md", {type: "text/plain", lastModified: date})
+			if (document.getElementById("base64").value == ""){
+				var element = document.createElement('a');
+				element.setAttribute('href', 'data:markdown/markdown;charset=utf-8,' + encodeURIComponent(output));
+				element.setAttribute('download', filename);
+				element.style.display = 'none';
+				document.body.appendChild(element);
+				element.click();
+				document.body.removeChild(element);
+			} else {
+				myBundle.generateZip(output, filename);
+			}
 		},
     };
     

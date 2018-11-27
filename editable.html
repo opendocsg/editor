@@ -10,10 +10,12 @@
 
 <body>
 	<input type="file" id="docupload" name="docupload" style="display:none" onchange="myBundle.detectUpload()" accept=".doc,.docx,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document,.md">
+	<textarea id="base64" style="display:none;"></textarea>
 	<div id="editormd">
 		<textarea id="markdown" style="display:none;">**Upload your Word/ Markdown document and start editing!**</textarea>
 	</div>
 	<script src="jquery-3.3.1.min.js"></script>
+	<script src="bundle.js"></script>
 	<script src="editormd.js"></script>
 	<script src="languages/en.js"></script>
 	<script type="text/javascript">
@@ -23,10 +25,4 @@
 			});
 		});
 	</script>
-	<script>
-      function jsFunc(arg1, arg2) {
-        if (arg1 && arg2) document.body.innerHTML = "achoo";
-      }
-    </script>
-	<script src="bundle.js"></script>	
 </body>
