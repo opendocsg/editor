@@ -131,9 +131,45 @@
         saveHTMLToTextarea   : false,
         disabledKeyMaps      : [],
         
-        onload               : function() {},
+        onload               : function() {
+									if(window.location.hash){
+										var h = window.location.hash.replace(/^#/, '');
+										if(h.slice(0,5) == 'view:'){
+											setOutput(decodeURIComponent(escape(RawDeflate.inflate(atob(h.slice(5))))));
+											document.body.className = 'view';
+										} else {
+											this.cm.setValue(decodeURIComponent(escape(
+												RawDeflate.inflate(
+													atob(
+														h
+													)
+												)
+											)));
+											this.editor.focus();
+										}
+									} else {
+										this.editor.focus();
+									}
+								},
         onresize             : function() {},
-        onchange             : function() {},
+        onchange             : function() {
+									editormd.defaults.onchangebounce(this);
+								},
+		onchangebounce       : (function() {
+									var hashto;    
+									return function(self){
+										clearTimeout(hashto);
+										hashto = setTimeout(function(){
+											window.location.hash = btoa( // base64 so url-safe
+												RawDeflate.deflate( // gzip
+													unescape(encodeURIComponent( // convert to utf8
+														self.editor.children("textarea")[0].innerText
+													))
+												)
+											);
+										}, 1000);
+									}
+								})(),
         onwatch              : null,
         onunwatch            : null,
         onpreviewing         : function() {},
@@ -630,7 +666,6 @@
             {
                 this.codeMirror.find(".CodeMirror-gutters").css("border-right", "none");
             }
-
             return this;
         },
         
@@ -1940,6 +1975,7 @@
          */
         
         setValue : function(value) {
+			
             this.cm.setValue(value);
             
             return this;
@@ -3857,7 +3893,11 @@
 
         return eventType;
     };
-
+	
+	editormd.getObject = function(){
+		return editormd;
+	}
+	
     return editormd;
 
 }));

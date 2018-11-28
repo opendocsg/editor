@@ -1,7 +1,5 @@
 var mammoth = require("mammoth");
 var TurndownService = require('turndown');
-var JSZip = require('jszip');
-var FileSaver = require('file-saver');
 
 var detectUpload = function(){
 	document.getElementById("base64").value = "";
@@ -38,18 +36,16 @@ var detectUpload = function(){
 									filter: 'img',
 									replacement: function (content) {
 										count += 1;
-										return '![~~*Alternative Text*~~](images/'+count+'.png)';
+										return '![Alternative Text](images/'+count+'.png)';
 									}
 								})
 								var markdown = turndownService.turndown(html);
-								document.getElementById("markdown").value = markdown;
-								location.reload();								
+								setOutput(markdown);
 						});
 					})
 				} else if (ext == "md") {
 					readFileInputEventAsText(function(text) {
-						document.getElementById("markdown").value = text;
-						location.reload();
+						setOutput(text);	
 					})
 				} else {
 					alert("Please select a valid file!");
@@ -64,22 +60,6 @@ var detectUpload = function(){
 			alert("This function is not supported by your browser!")
         }
     }
-}
-
-var generateZip = function(output, filename){
-	var zip = new JSZip();
-	zip.file(filename, output);
-	var img = zip.folder("images");
-	var html = document.getElementById("base64").value;
-	var base64 = html.split(',');
-	for (var i = 0; i < base64.length; i++){
-		img.file(String(i+1)+".png", base64[i], {base64: true});
-	}
-	zip.generateAsync({type:"blob"}).then(function(blob) {
-		FileSaver.saveAs(blob, "package.zip");
-	}, function(err) {
-		alert(err.message);
-	});
 }
 
 function readFileInputEventAsArrayBuffer(callback) {
@@ -100,4 +80,16 @@ function readFileInputEventAsText(callback) {
 	reader.readAsText(file);
 }
 
-module.exports = {detectUpload: detectUpload, generateZip: generateZip};
+function setOutput(output) {
+	document.getElementById("markdown").value = output;
+	window.location.hash = btoa( // base64 so url-safe
+		RawDeflate.deflate( // gzip
+			unescape(encodeURIComponent( // convert to utf8
+				document.getElementById("markdown").value
+			))
+		)
+	);
+	location.reload();
+}
+
+module.exports = {detectUpload: detectUpload};
