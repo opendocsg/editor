@@ -6815,12 +6815,12 @@ var detectUpload = function(){
 									}
 								})
 								var markdown = turndownService.turndown(html);
-								setOutput(markdown);
+								editor.setMarkdown(markdown);
 						});
 					})
 				} else if (ext == "md") {
 					readFileInputEventAsText(function(text) {
-						setOutput(text);	
+						editor.setMarkdown(text);	
 					})
 				} else {
 					alert("Please select a valid file!");
@@ -6853,18 +6853,6 @@ function readFileInputEventAsText(callback) {
 		callback(text);
 	};
 	reader.readAsText(file);
-}
-
-function setOutput(output) {
-	document.getElementById("markdown").value = output;
-	window.location.hash = btoa( // base64 so url-safe
-		RawDeflate.deflate( // gzip
-			unescape(encodeURIComponent( // convert to utf8
-				document.getElementById("markdown").value
-			))
-		)
-	);
-	location.reload();
 }
 
 module.exports = {detectUpload: detectUpload};
