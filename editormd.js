@@ -2692,7 +2692,7 @@
 				element.click();
 				document.body.removeChild(element);
 			} else {
-				bundleTwo.generateZip(output, filename);
+				bundletwo.generateZip(output, filename);
 			}
 		},
     };
