@@ -1726,9 +1726,24 @@
                 this.htmlTextarea.text(newMarkdownDoc);
             }
             
-            if(settings.watch || (!settings.watch && state.preview))
+            if (settings.watch || (!settings.watch && state.preview))
             {
-                previewContainer.html(newMarkdownDoc);
+                //CODEMARKER
+				var html = document.getElementById("base64").value;
+				if (html != ""){
+					var base64 = html.split(',');
+					var count = 0;
+					while (count < base64.length){
+						count += 1;
+						var toReplace = 'images/'+count+'.png';
+						if (newMarkdownDoc.indexOf(toReplace) != -1){ //Reference can be found
+							newMarkdownDoc = newMarkdownDoc.split(toReplace).join("data:image/png;base64,"+base64[count-1]);
+						}
+					}
+					document.getElementById("base64").value = base64.toString();
+				}
+				
+				previewContainer.html(newMarkdownDoc);
 
                 this.previewCodeHighlight();
                 
