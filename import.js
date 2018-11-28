@@ -1,4 +1,4 @@
-var mammoth = require("mammoth");
+var mammoth = require('mammoth');
 var TurndownService = require('turndown');
 
 var detectUpload = function(){

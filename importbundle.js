@@ -6773,7 +6773,7 @@ function hasOwnProperty(obj, prop) {
 
 }).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{"./support/isBuffer":31,"_process":12,"inherits":7}],33:[function(require,module,exports){
-var mammoth = require("mammoth");
+var mammoth = require('mammoth');
 var TurndownService = require('turndown');
 
 var detectUpload = function(){
