@@ -70,7 +70,7 @@
             "h1", "h2", "h3", "h4", "h5", "h6", "|", 
             "list-ul", "list-ol", "hr", "|",
             "link", "image", "code", "preformatted-text", "table", "pagebreak", "|",
-            "preview", "search", "|",
+            "preview", "search", "mode", "|",
 			"file-upload", "file-export"
         ],
         simple : [
@@ -102,6 +102,7 @@
         delay                : 300,            // Delay parse markdown to html, Uint : ms
         autoLoadModules      : true,           // Automatic load dependent module files
         watch                : true,
+		//day                  : true,
         placeholder          : "Enjoy Markdown! coding now...",
         gotoLine             : true,
         codeFold             : false,
@@ -174,8 +175,6 @@
         onunwatch            : null,
         onpreviewing         : function() {},
         onpreviewed          : function() {},
-        onfullscreen         : function() {},
-        onfullscreenExit     : function() {},
         onscroll             : function() {},
         onpreviewscroll      : function() {},
         
@@ -245,6 +244,8 @@
             pagebreak        : "fa-newspaper-o",
             preview          : "fa-desktop",
             search           : "fa-search",
+			//day              : "fa-sun-o",
+			mode             : "fa-moon-o",
 			"file-upload"    : "fa-upload",
 			"file-export"    : "fa-download"
         },        
@@ -269,7 +270,7 @@
             watching   : false,
             loaded     : false,
             preview    : false,
-            fullscreen : false
+			//day        : false,
         },
         
         /**
@@ -311,6 +312,7 @@
             settings.pluginPath = (settings.pluginPath === "") ? settings.path + "../plugins/" : settings.pluginPath; 
             
             this.state.watching = (settings.watch) ? true : false;
+			//this.state.day = (settings.day) ? true : false;
             
             if ( !editor.hasClass("editormd") ) {
                 editor.addClass("editormd");
@@ -931,7 +933,7 @@
                 }
             };
             
-            if (!state.fullscreen && !state.preview && settings.toolbar && settings.toolbarAutoFixed)
+            if (!state.preview && settings.toolbar && settings.toolbarAutoFixed)
             {
                 $(window).bind("scroll", autoFixedHandle);
             }
@@ -1002,6 +1004,10 @@
                     if (name === "watch" && !settings.watch) {
                         index = "unwatch";
                     }
+					
+					//if (name === "day" && !settings.day) {
+                    //    index = "night";
+                    //}
                     
                     var title     = settings.lang.toolbar[index];
                     var iconTexts = settings.toolbarIconTexts[index];
@@ -1117,7 +1123,7 @@
                 }
                 
                 if (name !== "link" && name !== "reference-link" && name !== "image" && name !== "code-block" && 
-                    name !== "preformatted-text" && name !== "watch" && name !== "preview" && name !== "search" && name !== "fullscreen" && name !== "info") 
+                    name !== "preformatted-text" && name !== "watch" && name !== "preview" && name !== "search" && name !== "info") 
                 {
                     cm.focus();
                 }
@@ -1328,11 +1334,6 @@
                                 
                             case 121:
                                     $.proxy(toolbarHandlers["preview"], _this)();
-                                    return false;
-                                break;
-                                
-                            case 122:
-                                    $.proxy(toolbarHandlers["fullscreen"], _this)();                        
                                     return false;
                                 break;
                                 
@@ -1582,7 +1583,7 @@
                 editor.css("width", (typeof width  === "number") ? width  + "px" : width);
             }
             
-            if (settings.autoHeight && !state.fullscreen && !state.preview)
+            if (settings.autoHeight && !state.preview)
             {
                 editor.css("height", "auto");
                 codeMirror.css("height", "auto");
@@ -1594,11 +1595,6 @@
                     editor.css("height", (typeof height === "number") ? height + "px" : height);
                 }
                 
-                if (state.fullscreen)
-                {
-                    editor.height($(window).height());
-                }
-
                 if (settings.toolbar && !settings.readOnly) 
                 {
                     codeMirror.css("margin-top", toolbar.height() + 1).height(editor.height() - toolbar.height());
@@ -1625,7 +1621,7 @@
                     preview.css("top", 0);
                 }
                 
-                if (settings.autoHeight && !state.fullscreen && !state.preview)
+                if (settings.autoHeight && !state.preview)
                 {
                     preview.height("");
                 }
@@ -1728,7 +1724,7 @@
             
             if (settings.watch || (!settings.watch && state.preview))
             {
-                //CODEMARKER
+				//Rendering images
 				var html = document.getElementById("base64").value;
 				if (html != ""){
 					var base64 = html.split(',');
@@ -1742,6 +1738,37 @@
 					}
 					document.getElementById("base64").value = base64.toString();
 				}
+				
+				//Rendering checkbox (checked)
+				while ((newMarkdownDoc.indexOf('<li>[x]') != -1) || (newMarkdownDoc.indexOf('<li><p>[x]') != -1)){ //Reference can be found
+					var index = 0;
+					if (newMarkdownDoc.indexOf('<li>[x]') != -1)
+						index = newMarkdownDoc.indexOf('<li>[x]');
+					else
+						index = newMarkdownDoc.indexOf('<li><p>[x]');
+					var firstHalf = newMarkdownDoc.substring(0, index+3);
+					firstHalf = firstHalf + ' style="list-style-type:none">';
+					var secondHalf = newMarkdownDoc.substring(index+4, );
+					secondHalf = secondHalf.replace('[x]', '<input type="checkbox" checked disabled/>');
+					newMarkdownDoc = firstHalf + secondHalf;
+				}
+				
+				//Rendering checkbox (unchecked)
+				while ((newMarkdownDoc.indexOf('<li>[ ]') != -1) || (newMarkdownDoc.indexOf('<li><p>[ ]') != -1)){ //Reference can be found
+					console.log("HERE!");
+					var index = 0;
+					if (newMarkdownDoc.indexOf('<li>[ ]') != -1)
+						index = newMarkdownDoc.indexOf('<li>[ ]');
+					else
+						index = newMarkdownDoc.indexOf('<li><p>[ ]');
+					var firstHalf = newMarkdownDoc.substring(0, index+3);
+					firstHalf = firstHalf + ' style="list-style-type:none">';
+					var secondHalf = newMarkdownDoc.substring(index+4, );
+					secondHalf = secondHalf.replace('[ ]', '<input type="checkbox" unchecked disabled/>');
+					newMarkdownDoc = firstHalf + secondHalf;
+				}
+				
+				console.log(newMarkdownDoc);
 				
 				previewContainer.html(newMarkdownDoc);
 
@@ -2131,10 +2158,6 @@
             if (codeMirror.css("display") === "none") // 为了兼容Zepto，而不使用codeMirror.is(":hidden")
             {
                 this.state.preview = true;
-
-                if (this.state.fullscreen) {
-                    preview.css("background", "#fff");
-                }
                 
                 editor.find("." + this.classPrefix + "preview-close-btn").show().bind(editormd.mouseOrTouch("click", "touchend"), function(){
                     _this.previewed();
@@ -2155,7 +2178,7 @@
                     position  : "",
                     top       : 0,
                     width     : editor.width(),
-                    height    : (settings.autoHeight && !this.state.fullscreen) ? "auto" : editor.height()
+                    height    : (settings.autoHeight) ? "auto" : editor.height()
                 });
                 
                 if (this.state.loaded)
@@ -2211,7 +2234,7 @@
                 background : null,
                 position   : "absolute",
                 width      : editor.width() / 2,
-                height     : (settings.autoHeight && !this.state.fullscreen) ? "auto" : editor.height() - toolbar.height(),
+                height     : (settings.autoHeight) ? "auto" : editor.height() - toolbar.height(),
                 top        : (settings.toolbar)    ? toolbar.height() : 0
             });
 
@@ -2674,6 +2697,95 @@
         search : function() {
             this.search();
         },
+		
+		/*
+		day : function() {
+			this.setTheme("");
+			this.setEditorTheme("default");
+			this.setPreviewTheme("");
+			
+			this.state.day = this.settings.day = false;
+			
+			if (this.toolbar)
+            {
+                console.log("DAY WORKS");
+				var dayIcon   = this.settings.toolbarIconsClass.day;
+                var nightIcon = this.settings.toolbarIconsClass.night;                
+                var icon      = this.toolbar.find(".fa[name=moon-o]");
+                icon.parent().attr("title", this.settings.lang.toolbar.night);
+                icon.removeClass(dayIcon).addClass(nightIcon);
+            }
+		},
+		
+		
+		day : function() {
+			this.setTheme("");
+			this.setEditorTheme("default");
+			this.setPreviewTheme("");
+			
+			this.state.day = this.settings.day = true;
+			
+			if (this.toolbar)
+            {
+                console.log("DAY WORKS");
+				var dayIcon   = this.settings.toolbarIconsClass.day;
+                var nightIcon = this.settings.toolbarIconsClass.night;               
+                var icon      = this.toolbar.find(".fa[name=sun-o]");
+                icon.parent().attr("title", this.settings.lang.toolbar.day);
+                icon.removeClass(nightIcon).addClass(dayIcon);
+            }
+		},
+		
+		
+		night : function() {
+			this.setTheme("dark");
+			this.setEditorTheme("mbo");
+			this.setPreviewTheme("dark");
+			
+			this.state.day = this.settings.day = true;
+			
+			if (this.toolbar)
+            {
+                console.log("NIGHT WORKS");
+				var dayIcon   = this.settings.toolbarIconsClass.day;
+                var nightIcon = this.settings.toolbarIconsClass.night;                
+                var icon      = this.toolbar.find(".fa[name=sun-o]");
+                icon.parent().attr("title", this.settings.lang.toolbar.day);
+                icon.removeClass(nightIcon).addClass(dayIcon);
+            }
+		},
+		
+		
+		night : function() {
+			this.setTheme("dark");
+			this.setEditorTheme("mbo");
+			this.setPreviewTheme("dark");
+			
+			this.state.day = this.settings.day = false;
+			
+			if (this.toolbar)
+            {
+                console.log("NIGHT WORKS");
+				var dayIcon   = this.settings.toolbarIconsClass.day;
+                var nightIcon = this.settings.toolbarIconsClass.night;
+                var icon      = this.toolbar.find(".fa[name=moon-o]");
+                icon.parent().attr("title", this.settings.lang.toolbar.night);
+                icon.removeClass(dayIcon).addClass(nightIcon);
+            }
+		},
+		*/
+		
+		mode : function() {
+			if (this.settings.theme == ""){
+				this.setTheme("dark");
+				this.setEditorTheme("mbo");
+				this.setPreviewTheme("dark");
+			} else {
+				this.setTheme("");
+				this.setEditorTheme("default");
+				this.setPreviewTheme("");
+			}
+		},
 		
 		"file-upload" : function() {
 			alert("Please upload either a Word or Markdown file.");
@@ -3908,10 +4020,6 @@
 
         return eventType;
     };
-	
-	editormd.getObject = function(){
-		return editormd;
-	}
 	
     return editormd;
 
