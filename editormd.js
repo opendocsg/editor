@@ -381,7 +381,7 @@
             var appendElements = [
                 (!settings.readOnly) ? "<a href=\"javascript:;\" class=\"fa fa-close " + classPrefix + "preview-close-btn\"></a>" : "",
                 ( (settings.saveHTMLToTextarea) ? "<textarea class=\"" + classNames.textarea.html + "\" name=\"" + id + "-html-code\"></textarea>" : "" ),
-                "<div class=\"" + classPrefix + "preview\"><div class=\"markdown-body " + classPrefix + "preview-container site-main\" style=\"left:0;\"></div></div>",
+                "<div class=\"" + classPrefix + "preview\"><div class=\" preview-container site-main\" style=\"left:0;\"></div></div>",
                 "<div class=\"" + classPrefix + "container-mask\" style=\"display:block;\"></div>",
                 "<div class=\"" + classPrefix + "mask\"></div>"
             ].join("\n");
@@ -408,7 +408,7 @@
             
             this.htmlTextarea     = editor.children("." + classNames.textarea.html);            
             this.preview          = editor.children("." + classPrefix + "preview");
-            this.previewContainer = this.preview.children("." + classPrefix + "preview-container");
+            this.previewContainer = this.preview.children(".preview-container");
             
             if (settings.previewTheme !== "") 
             {
@@ -1502,6 +1502,8 @@
                 if (settings.watch)
                 {
                     _this.previewContainer.css("padding", settings.autoHeight ? "20px 20px 50px 40px" : "20px");
+					_this.previewContainer.css("paddingTop", settings.autoHeight ? "20px 20px 50px 40px" : "0px");
+					_this.previewContainer.css("paddingBottom", settings.autoHeight ? "20px 20px 50px 40px" : "0px");
                 }
                 
                 timer = setTimeout(function() {
@@ -1646,6 +1648,8 @@
                 preview.width((!state.preview) ? editor.width() / 2 : editor.width());
                 
                 this.previewContainer.css("padding", settings.autoHeight ? "20px 20px 50px 40px" : "20px");
+				this.previewContainer.css("paddingTop", settings.autoHeight ? "20px 20px 50px 40px" : "0px");
+				this.previewContainer.css("paddingBottom", settings.autoHeight ? "20px 20px 50px 40px" : "0px");
                 
                 if (settings.toolbar && !settings.readOnly) 
                 {
@@ -2257,9 +2261,12 @@
                 
             previewContainer.removeClass(this.classPrefix + "preview-active");
                 
-            if (settings.watch)
+            
+			if (settings.watch)
             {
                 previewContainer.css("padding", "20px");
+				previewContainer.css("paddingTop", "0px");
+				previewContainer.css("paddingBottom", "0px");
             }
             
             preview.css({ 
@@ -3466,7 +3473,7 @@
             saveTo.remove();
         }
         
-        div.addClass("markdown-body " + this.classPrefix + "html-preview").append(markdownParsed);
+        div.addClass(this.classPrefix + "html-preview").append(markdownParsed);
         
         var tocContainer = (settings.tocContainer !== "") ? $(settings.tocContainer) : div;
         
