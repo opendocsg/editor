@@ -69,7 +69,7 @@
             "bold", "italic", "del", "quote", "ucwords", "uppercase", "lowercase", "|", 
             "h1", "h2", "h3", "h4", "h5", "h6", "|", 
             "list-ul", "list-ol", "hr", "|",
-            "link", "image", "code", "preformatted-text", "table", "pagebreak", "|",
+            "link", "image", "code", "preformatted-text", "table", "|",
             "preview", "search", "mode", "|",
 			"file-upload", "file-export"
         ],
@@ -219,7 +219,7 @@
         crossDomainUpload    : false,
         uploadCallbackURL    : "",
         
-        toc                  : true,           // Table of contents
+        toc                  : false,           // Table of contents
         tocm                 : false,           // Using [TOCM], auto create ToC dropdown menu
         tocTitle             : "",             // for ToC dropdown menu btn
         tocDropdown          : false,
@@ -1735,7 +1735,7 @@
                 renderer    : editormd.markedRenderer(markdownToC, rendererOptions),
                 gfm         : true,
                 tables      : true,
-                breaks      : true,
+                breaks      : false,
                 pedantic    : false,
                 sanitize    : (settings.htmlDecode) ? false : true,  // 关闭忽略HTML标签，即开启识别HTML标签，默认为false
                 smartLists  : true,
@@ -3409,7 +3409,7 @@
             markdownSourceCode   : false,
             htmlDecode           : false,
             autoLoadKaTeX        : true,
-            pageBreak            : true,
+            pageBreak            : false,
             atLink               : true,    // for @link
             emailLink            : true,    // for mail address auto link
             tex                  : false,
