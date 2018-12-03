@@ -146,6 +146,24 @@
 													)
 												)
 											)));
+											/* Image Rendering
+											var temp = decodeURIComponent(escape(
+												RawDeflate.inflate(
+													atob(
+														h
+													)
+												)
+											));
+											var contents = temp.split(";");
+											document.getElementById("base64").value = contents[1];
+											this.cm.setValue(decodeURIComponent(escape(
+												RawDeflate.inflate(
+													atob(
+														contents[0]
+													)
+												)
+											)));
+											*/
 											this.editor.focus();
 										}
 									} else {
@@ -168,6 +186,23 @@
 													))
 												)
 											);
+											/* Image Rendering
+											var temp = btoa( // base64 so url-safe
+												RawDeflate.deflate( // gzip
+													unescape(encodeURIComponent( // convert to utf8
+														self.editor.children("textarea")[0].innerText
+													))
+												)
+											);
+											temp += ";" + document.getElementById("base64").value;
+											window.location.hash = btoa( // base64 so url-safe
+												RawDeflate.deflate( // gzip
+													unescape(encodeURIComponent( // convert to utf8
+														temp
+													))
+												)
+											);
+											*/
 										}, 1000);
 									}
 								})(),
@@ -346,11 +381,11 @@
             var appendElements = [
                 (!settings.readOnly) ? "<a href=\"javascript:;\" class=\"fa fa-close " + classPrefix + "preview-close-btn\"></a>" : "",
                 ( (settings.saveHTMLToTextarea) ? "<textarea class=\"" + classNames.textarea.html + "\" name=\"" + id + "-html-code\"></textarea>" : "" ),
-                "<div class=\"" + classPrefix + "preview\"><div class=\"markdown-body " + classPrefix + "preview-container\"></div></div>",
+                "<div class=\"" + classPrefix + "preview\"><div class=\"markdown-body " + classPrefix + "preview-container site-main\" style=\"left:0;\"></div></div>",
                 "<div class=\"" + classPrefix + "container-mask\" style=\"display:block;\"></div>",
                 "<div class=\"" + classPrefix + "mask\"></div>"
             ].join("\n");
-            
+           
             editor.append(appendElements).addClass(classPrefix + "vertical");
             
             if (settings.theme !== "") 
@@ -1755,7 +1790,6 @@
 				
 				//Rendering checkbox (unchecked)
 				while ((newMarkdownDoc.indexOf('<li>[ ]') != -1) || (newMarkdownDoc.indexOf('<li><p>[ ]') != -1)){ //Reference can be found
-					console.log("HERE!");
 					var index = 0;
 					if (newMarkdownDoc.indexOf('<li>[ ]') != -1)
 						index = newMarkdownDoc.indexOf('<li>[ ]');
@@ -1767,9 +1801,7 @@
 					secondHalf = secondHalf.replace('[ ]', '<input type="checkbox" unchecked disabled/>');
 					newMarkdownDoc = firstHalf + secondHalf;
 				}
-				
-				console.log(newMarkdownDoc);
-				
+								
 				previewContainer.html(newMarkdownDoc);
 
                 this.previewCodeHighlight();
@@ -2697,83 +2729,6 @@
         search : function() {
             this.search();
         },
-		
-		/*
-		day : function() {
-			this.setTheme("");
-			this.setEditorTheme("default");
-			this.setPreviewTheme("");
-			
-			this.state.day = this.settings.day = false;
-			
-			if (this.toolbar)
-            {
-                console.log("DAY WORKS");
-				var dayIcon   = this.settings.toolbarIconsClass.day;
-                var nightIcon = this.settings.toolbarIconsClass.night;                
-                var icon      = this.toolbar.find(".fa[name=moon-o]");
-                icon.parent().attr("title", this.settings.lang.toolbar.night);
-                icon.removeClass(dayIcon).addClass(nightIcon);
-            }
-		},
-		
-		
-		day : function() {
-			this.setTheme("");
-			this.setEditorTheme("default");
-			this.setPreviewTheme("");
-			
-			this.state.day = this.settings.day = true;
-			
-			if (this.toolbar)
-            {
-                console.log("DAY WORKS");
-				var dayIcon   = this.settings.toolbarIconsClass.day;
-                var nightIcon = this.settings.toolbarIconsClass.night;               
-                var icon      = this.toolbar.find(".fa[name=sun-o]");
-                icon.parent().attr("title", this.settings.lang.toolbar.day);
-                icon.removeClass(nightIcon).addClass(dayIcon);
-            }
-		},
-		
-		
-		night : function() {
-			this.setTheme("dark");
-			this.setEditorTheme("mbo");
-			this.setPreviewTheme("dark");
-			
-			this.state.day = this.settings.day = true;
-			
-			if (this.toolbar)
-            {
-                console.log("NIGHT WORKS");
-				var dayIcon   = this.settings.toolbarIconsClass.day;
-                var nightIcon = this.settings.toolbarIconsClass.night;                
-                var icon      = this.toolbar.find(".fa[name=sun-o]");
-                icon.parent().attr("title", this.settings.lang.toolbar.day);
-                icon.removeClass(nightIcon).addClass(dayIcon);
-            }
-		},
-		
-		
-		night : function() {
-			this.setTheme("dark");
-			this.setEditorTheme("mbo");
-			this.setPreviewTheme("dark");
-			
-			this.state.day = this.settings.day = false;
-			
-			if (this.toolbar)
-            {
-                console.log("NIGHT WORKS");
-				var dayIcon   = this.settings.toolbarIconsClass.day;
-                var nightIcon = this.settings.toolbarIconsClass.night;
-                var icon      = this.toolbar.find(".fa[name=moon-o]");
-                icon.parent().attr("title", this.settings.lang.toolbar.night);
-                icon.removeClass(dayIcon).addClass(nightIcon);
-            }
-		},
-		*/
 		
 		mode : function() {
 			if (this.settings.theme == ""){
