@@ -1805,7 +1805,27 @@
 					secondHalf = secondHalf.replace('[ ]', '<input type="checkbox" unchecked disabled/>');
 					newMarkdownDoc = firstHalf + secondHalf;
 				}
-								
+				
+				//Rendering footers
+				while ((newMarkdownDoc.indexOf('[^') != -1)){ //Reference can be found
+					var openIndex = newMarkdownDoc.indexOf('[^');
+					if (newMarkdownDoc.indexOf(']', openIndex) != -1){
+						var closeIndex = newMarkdownDoc.indexOf(']', openIndex);
+						var firstPortion = newMarkdownDoc.substring(0, openIndex);
+						firstPortion = firstPortion + '<sup>';
+						var secondPortion = newMarkdownDoc.substring(openIndex+2, closeIndex);
+						secondPortion = secondPortion + '</sup>';
+						var thirdPortion = "";
+						if (newMarkdownDoc.charAt(closeIndex+1) == ':'){
+							thirdPortion = newMarkdownDoc.substring(closeIndex+2,);
+						} else {
+							thirdPortion = newMarkdownDoc.substring(closeIndex+1,);
+						}
+						newMarkdownDoc = firstPortion + secondPortion + thirdPortion;
+					}
+				}
+				
+				console.log(newMarkdownDoc);				
 				previewContainer.html(newMarkdownDoc);
 
                 this.previewCodeHighlight();
